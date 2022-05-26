@@ -6,14 +6,30 @@ plugins {
 android {
     compileSdk 32
 
+    def appVersionCode = Integer.valueOf(System.env.BUILD_NUMBER ?: 0)
     defaultConfig {
         applicationId "io.nevercode.androidappcm"
         minSdk 26
         targetSdk 32
-        versionCode 1
+        versionCode appVersionCode
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+                if (System.getenv()["CI"]) {
+                    storeFile file('/tmp/keystore.keystore')
+                    storePassword System.getenv()['CM_KEYSTORE_PASSWORD']
+                    keyAlias System.getenv()['CM_KEY_ALIAS_USERNAME']
+                    keyPassword System.getenv()['CM_KEY_ALIAS_PASSWORD']
+                } else {
+                    storeFile file("../../keys/codemagic.keystore")
+                    storePassword System.getenv()['CM_KEYSTORE_PASSWORD']
+                    keyAlias System.getenv()['CM_KEY_ALIAS_USERNAME']
+                    keyPassword System.getenv()['CM_KEY_ALIAS_PASSWORD']
+                }
+        }
     }
 
     buildTypes {
