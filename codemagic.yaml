@@ -16,10 +16,6 @@ workflows:
         # - pull_request
         # - tag
     scripts:
-      - name: Update S3 bucket
-        script: |
-          sudo pip3 install awscli --upgrade
-          aws s3 sync app/build/outputs/ s3://cm-hpapp-builds
       - name: Set up local properties
         script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
       - name: Set up key.properties file for code signing
@@ -33,6 +29,10 @@ workflows:
           EOF
       - name: Build Android app
         script: ./gradlew bundleRelease && ./gradlew assembleRelease # To generate an .apk use--> ./gradlew assembleRelease
+      # - name: Update S3 bucket
+      #   script: |
+      #     pip install awscli
+      #     aws s3 cp app/build/outputs/**/**/*.aab s3://cm-hpapp-builds
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
