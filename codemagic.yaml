@@ -31,7 +31,13 @@ workflows:
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
-    # publishing:
-    #   google_play:
-    #     credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-    #     track: internal
+    publishing:
+      slack:
+        channel: codemagic-builds-testing
+        notify_on_build_start: true # To receive a notification when a build starts
+        notify:
+          success: false # To not receive a notification when a build succeeds
+          failure: false # To not receive a notification when a build fails
+      # google_play:
+      #   credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+      #   track: internal

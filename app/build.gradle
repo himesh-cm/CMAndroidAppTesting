@@ -13,7 +13,7 @@ android {
         targetSdk 32
         versionCode appVersionCode
         versionName "1.1"
-        archiveBaseName = "AndroidAppTesting-" + versionName + "-" + versionCode
+        setProperty("archivesBaseName", applicationId + "-v" + versionCode + "(" + versionName + ")")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
