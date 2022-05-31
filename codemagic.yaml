@@ -5,21 +5,17 @@ workflows:
     instance_type: linux_x2
     environment:
       groups:
-        - keystore_credentials # <-- Includes - CM_KEYSTORE, CM_KEYSTORE_PASSWORD, CM_KEY_PASSWORD, CM_KEY_ALIAS      # Add the group environment variables in Codemagic UI (either in Application/Team variables) - https://docs.codemagic.io/variables/environment-variable-groups/
+        - keystore_credentials
         - aws_credentials
       vars:
         PACKAGE_NAME: io.nevercode.androidappcm
         # CM_KEYSTORE_PATH: /tmp/keystore.keystore
     triggering:
-      events: # List the events that trigger builds
+      events:
         - push
         # - pull_request
         # - tag
     scripts:
-      # - name: Update S3 bucket
-      #   script: |
-      #     sudo pip3 install awscli --upgrade
-      #     aws s3 sync /app/build/outputs/ s3://cm-hpapp-builds/
       - name: Set up local properties
         script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
       - name: Set up key.properties file for code signing
@@ -32,27 +28,23 @@ workflows:
           storeFile=$CM_KEYSTORE_PATH
           EOF
       - name: Build Android app
-        script: ./gradlew bundleRelease && ./gradlew assembleRelease # To generate an .apk use--> ./gradlew assembleRelease
+        script: ./gradlew bundleRelease && ./gradlew assembleRelease
       - name: Update S3 bucket
         script: |
           sudo apt-get install python3-pip
           sudo pip3 install awscli --upgrade
           echo $CM_BUILD_OUTPUT_DIR        
           aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
-      # - name: Update S3 bucket
-      #   script: |
-      #     sudo pip3 install awscli --upgrade
-      #     aws s3 cp /app/build/outputs/apk/release/io.nevercode.androidappcm-v18(1.1)-release.apk s3://cm-hpapp-builds/io.nevercode.androidappcm-v18(1.1)-release.apk
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
     publishing:
       slack:
         channel: codemagic-builds-testing
-        notify_on_build_start: true # To receive a notification when a build starts
+        notify_on_build_start: true
         notify:
-          success: true # To not receive a notification when a build succeeds
-          failure: true # To not receive a notification when a build fails
+          success: true
+          failure: true
       # google_play:
       #   credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
       #   track: internal
