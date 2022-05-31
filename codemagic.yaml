@@ -33,7 +33,7 @@ workflows:
       - app/build/outputs/**/**/*.apk
     publishing:
       slack:
-        channel: codemagic-builds-testing
+        channel: 'codemagic-builds-testing'
         notify_on_build_start: true # To receive a notification when a build starts
         notify:
           success: true # To not receive a notification when a build succeeds
