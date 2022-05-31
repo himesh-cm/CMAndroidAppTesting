@@ -32,7 +32,8 @@ workflows:
       - name: Update S3 bucket
         script: |
           sudo pip install awscli --upgrade
-          echo $CM_BUILD_OUTPUT_DIR        
+          echo $CM_BUILD_OUTPUT_DIR
+          aws s3 ls
           aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
     artifacts:
       - app/build/outputs/**/**/*.aab
