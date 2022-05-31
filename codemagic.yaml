@@ -31,8 +31,7 @@ workflows:
         script: ./gradlew bundleRelease && ./gradlew assembleRelease
       - name: Update S3 bucket
         script: |
-          sudo apt-get install python3-pip
-          sudo pip3 install awscli --upgrade
+          sudo pip install awscli --upgrade
           echo $CM_BUILD_OUTPUT_DIR        
           aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
     artifacts:
