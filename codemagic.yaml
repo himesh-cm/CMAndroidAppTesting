@@ -6,6 +6,7 @@ workflows:
     environment:
       groups:
         - keystore_credentials # <-- Includes - CM_KEYSTORE, CM_KEYSTORE_PASSWORD, CM_KEY_PASSWORD, CM_KEY_ALIAS      # Add the group environment variables in Codemagic UI (either in Application/Team variables) - https://docs.codemagic.io/variables/environment-variable-groups/
+        - aws_credentials
       vars:
         PACKAGE_NAME: io.nevercode.androidappcm
         # CM_KEYSTORE_PATH: /tmp/keystore.keystore
@@ -28,6 +29,10 @@ workflows:
           EOF
       - name: Build Android app
         script: ./gradlew bundleRelease && ./gradlew assembleRelease # To generate an .apk use--> ./gradlew assembleRelease
+      - name: Update S3 bucket
+        script: |
+          sudo pip3 install awscli --upgrade
+          aws s3 sync app/build/outputs/**/**/*.aab s3://cm-hpapp-builds
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
