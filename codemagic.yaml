@@ -32,10 +32,10 @@ workflows:
       - name: Update S3 bucket
         script: |
           echo $CM_BUILD_OUTPUT_DIR
+          cd $CM_BUILD_OUTPUT_DIR
+          ls
           aws s3 ls
           aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
-          aws s3 sync /app/build/outputs s3://cm-hpapp-builds/
-          aws s3 sync /app/build/outputs/apk/release/ s3://cm-hpapp-builds/
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
