@@ -4,7 +4,7 @@
       "text": "Testing Release notes in slack integration",
       "description": "Updated app description",
       "keywords": "keyword, other keyword",
-      "promotional_text": "Promotional text",
+      "promotional_text": "Added slack to team settings",
       "marketing_url": "https://example.com",
       "support_url": "https://example.com"
   }
