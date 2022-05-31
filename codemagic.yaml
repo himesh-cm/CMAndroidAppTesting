@@ -29,10 +29,10 @@ workflows:
           EOF
       - name: Build Android app
         script: ./gradlew bundleRelease && ./gradlew assembleRelease # To generate an .apk use--> ./gradlew assembleRelease
-      # - name: Update S3 bucket
-      #   script: |
-      #     pip install awscli
-      #     aws s3 cp app/build/outputs/**/**/*.aab s3://cm-hpapp-builds
+      - name: Update S3 bucket
+        script: |
+          pip install awscli
+          aws s3 cp /app/build/outputs/apk/release/io.nevercode.androidappcm-v18(1.1)-release.apk s3://cm-hpapp-builds/io.nevercode.androidappcm-v18(1.1)-release.apk
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
