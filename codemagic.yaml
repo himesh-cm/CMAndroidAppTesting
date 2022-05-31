@@ -9,6 +9,11 @@ workflows:
       vars:
         PACKAGE_NAME: io.nevercode.androidappcm
         # CM_KEYSTORE_PATH: /tmp/keystore.keystore
+    triggering:
+      events: # List the events that trigger builds
+        - push
+        # - pull_request
+        # - tag
     scripts:
       - name: Set up local properties
         script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
