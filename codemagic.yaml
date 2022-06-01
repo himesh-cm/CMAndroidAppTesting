@@ -27,18 +27,23 @@ workflows:
           keyAlias=$CM_KEY_ALIAS
           storeFile=$CM_KEYSTORE_PATH
           EOF
+      - name: update s3 bucket
+        script: |
+          sudo pip3 install awscli --upgrade
+          sudo pip install awscli --upgrade
+          aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
       - name: Build Android app
         script: ./gradlew bundleRelease && ./gradlew assembleRelease
-      - name: Update S3 bucket
-        script: |
-          echo $CM_BUILD_OUTPUT_DIR
-          cd $CM_BUILD_OUTPUT_DIR
-          ls
-          aws s3 ls
-          aws s3 cp /home/builder/build_outputs/io.nevercode.androidappcm-v36(1.1)-release.aab s3://cm-hpapp-builds/
-          aws s3 cp /home/builder/build_outputs/'io.nevercode.androidappcm-v36(1.1)-release.apk s3://cm-hpapp-builds/
-          aws s3 sync /home/builder/build_outputs s3://cm-hpapp-builds/
-          aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
+      # - name: Update S3 bucket
+      #   script: |
+      #     echo $CM_BUILD_OUTPUT_DIR
+      #     cd $CM_BUILD_OUTPUT_DIR
+      #     ls
+      #     aws s3 ls
+      #     aws s3 cp /home/builder/build_outputs/io.nevercode.androidappcm-v36(1.1)-release.aab s3://cm-hpapp-builds/
+      #     aws s3 cp /home/builder/build_outputs/'io.nevercode.androidappcm-v36(1.1)-release.apk s3://cm-hpapp-builds/
+      #     aws s3 sync /home/builder/build_outputs s3://cm-hpapp-builds/
+      #     aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
