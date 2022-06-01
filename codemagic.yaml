@@ -44,9 +44,7 @@ workflows:
           aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
           aws configure set default.region us-east-1
           aws s3 ls
-          aws s3 sync /home/builder/build_outputs s3://cm-hpapp-builds/
           aws s3 sync /home/builder/build_outputs/ s3://cm-hpapp-builds/
-          aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
