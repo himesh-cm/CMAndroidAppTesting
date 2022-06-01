@@ -35,7 +35,9 @@ workflows:
           cd $CM_BUILD_OUTPUT_DIR
           ls
           aws s3 ls
-          aws s3 sync /home/build_outputs s3://cm-hpapp-builds/
+          aws s3 cp /home/builder/build_outputs/io.nevercode.androidappcm-v36(1.1)-release.aab s3://cm-hpapp-builds/
+          aws s3 cp /home/builder/build_outputs/'io.nevercode.androidappcm-v36(1.1)-release.apk s3://cm-hpapp-builds/
+          aws s3 sync /home/builder/build_outputs s3://cm-hpapp-builds/
           aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
     artifacts:
       - app/build/outputs/**/**/*.aab
