@@ -16,14 +16,6 @@ workflows:
         # - pull_request
         # - tag
     scripts:
-      - name: Update S3 bucket
-        script: |
-          echo $CM_BUILD_OUTPUT_DIR
-          cd $CM_BUILD_OUTPUT_DIR
-          ls
-          aws s3 ls
-          aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
-          aws s3 sync /home/builder/build_outputs/ s3://cm-hpapp-builds/
       - name: Set up local properties
         script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
       - name: Set up key.properties file for code signing
@@ -37,6 +29,14 @@ workflows:
           EOF
       - name: Build Android app
         script: ./gradlew bundleRelease && ./gradlew assembleRelease
+      - name: Update S3 bucket
+        script: |
+          echo $CM_BUILD_OUTPUT_DIR
+          cd $CM_BUILD_OUTPUT_DIR
+          ls
+          aws s3 ls
+          aws s3 sync /home/build_outputs s3://cm-hpapp-builds/
+          aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
