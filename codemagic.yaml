@@ -40,13 +40,14 @@ workflows:
           cd $CM_BUILD_OUTPUT_DIR
           ls
           echo $AWS_ACCESS_KEY_ID
-          echo $AWS_ACCESS_KEY_SECRET
+          echo $AWS_SECRET_ACCESS_KEY
           aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-          aws configure set aws_access_key_id $AWS_SECRET_ACCESS_KEY
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
           aws configure set default.region us-east-1
+          cd $CM_BUILD_OUTPUT_DIR
+          cd $CM_BUILD_OUTPUT_DIR
+          ls
           aws s3 ls
-          aws s3 cp /home/builder/build_outputs/io.nevercode.androidappcm-v36(1.1)-release.aab s3://cm-hpapp-builds/
-          aws s3 cp /home/builder/build_outputs/'io.nevercode.androidappcm-v36(1.1)-release.apk s3://cm-hpapp-builds/
           aws s3 sync /home/builder/build_outputs s3://cm-hpapp-builds/
           aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
     artifacts:
