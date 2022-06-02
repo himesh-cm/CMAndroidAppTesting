@@ -28,22 +28,12 @@ workflows:
           keyAlias=$CM_KEY_ALIAS
           storeFile=$CM_KEYSTORE_PATH
           EOF
-      # - name: update s3 bucket
-      #   script: |
-      #     sudo pip3 install awscli --upgrade
-      #     sudo pip install awscli --upgrade
-      #     aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
       - name: Build Android app
         script: ./gradlew bundleRelease && ./gradlew assembleRelease
       - name: Update S3 bucket
         script: |
           echo $CM_BUILD_OUTPUT_DIR
           ls
-          echo $AWS_ACCESS_KEY_ID
-          echo $AWS_SECRET_ACCESS_KEY
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-          aws configure set default.region us-east-1
           aws s3 ls
           aws s3 sync $CM_BUILD_DIR/app/build/outputs/ s3://cm-hpapp-builds/
       - name: upload to Google storage
