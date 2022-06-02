@@ -7,6 +7,7 @@ workflows:
       groups:
         - keystore_credentials
         - aws_credentials
+        - GOOGLE_APP_CREDENTIALS
       vars:
         PACKAGE_NAME: io.nevercode.androidappcm
         # CM_KEYSTORE_PATH: /tmp/keystore.keystore
@@ -34,6 +35,11 @@ workflows:
       #     aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
       - name: Build Android app
         script: ./gradlew bundleRelease && ./gradlew assembleRelease
+      - name: upload to Google storage
+        script: |
+          echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
+          gcloud auth activate-service-account --key-file $CM_BUILD_DIR/gcloud_storage_key.json
+          gsutil cp $CM_BUILD_DIR/app/build/outputs/**/*.apk gs://cmappbuilds
       - name: Update S3 bucket
         script: |
           echo $CM_BUILD_OUTPUT_DIR
@@ -44,7 +50,8 @@ workflows:
           aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
           aws configure set default.region us-east-1
           aws s3 ls
-          cp $CM_BUILD_DIR/app/build/outputs/**/*.apk s3://cm-hpapp-builds/
+          aws s3 sync $CM_BUILD_DIR/app/build/outputs/ s3://cm-hpapp-builds/
+          aws s3 cp $CM_BUILD_DIR/app/build/outputs/**/*.apk s3://cm-hpapp-builds/
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
