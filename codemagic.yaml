@@ -46,7 +46,6 @@ workflows:
           aws configure set default.region us-east-1
           aws s3 ls
           aws s3 sync $CM_BUILD_DIR/app/build/outputs/ s3://cm-hpapp-builds/
-          aws s3 cp $CM_BUILD_DIR/app/build/outputs/**/*.apk s3://cm-hpapp-builds/
       - name: upload to Google storage
         script: |
           echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
