@@ -35,11 +35,6 @@ workflows:
       #     aws s3 sync $CM_BUILD_OUTPUT_DIR s3://cm-hpapp-builds/
       - name: Build Android app
         script: ./gradlew bundleRelease && ./gradlew assembleRelease
-      - name: upload to Google storage
-        script: |
-          echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
-          gcloud auth activate-service-account --key-file $CM_BUILD_DIR/gcloud_storage_key.json
-          gsutil cp $CM_BUILD_DIR/app/build/outputs/**/*.apk gs://cmappbuilds
       - name: Update S3 bucket
         script: |
           echo $CM_BUILD_OUTPUT_DIR
@@ -52,6 +47,11 @@ workflows:
           aws s3 ls
           aws s3 sync $CM_BUILD_DIR/app/build/outputs/ s3://cm-hpapp-builds/
           aws s3 cp $CM_BUILD_DIR/app/build/outputs/**/*.apk s3://cm-hpapp-builds/
+      - name: upload to Google storage
+        script: |
+          echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
+          gcloud auth activate-service-account --key-file $CM_BUILD_DIR/gcloud_storage_key.json
+          gsutil cp $CM_BUILD_DIR/app/build/outputs/**/*.apk gs://cmappbuilds
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
