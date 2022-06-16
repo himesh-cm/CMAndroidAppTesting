@@ -30,17 +30,17 @@ workflows:
           EOF
       - name: Build Android app
         script: ./gradlew bundleRelease && ./gradlew assembleRelease
-      - name: Update S3 bucket
-        script: |
-          echo $CM_BUILD_OUTPUT_DIR
-          ls
-          aws s3 ls
-          aws s3 sync $CM_BUILD_DIR/app/build/outputs/ s3://cm-hpapp-builds/
-          aws s3 sync $CM_BUILD_OUTPUT_DIR/ s3://cm-hpapp-builds/
-        # script: |
-        #   echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
-        #   gcloud auth activate-service-account --key-file $CM_BUILD_DIR/gcloud_storage_key.json
-        #   gsutil cp $CM_BUILD_DIR/app/build/outputs/**/*.apk gs://cmappbuilds
+      # - name: Update S3 bucket
+      #   script: |
+      #     echo $CM_BUILD_OUTPUT_DIR
+      #     ls
+      #     aws s3 ls
+      #     aws s3 sync $CM_BUILD_DIR/app/build/outputs/ s3://cm-hpapp-builds/
+      #     aws s3 sync $CM_BUILD_OUTPUT_DIR/ s3://cm-hpapp-builds/
+      # script: |
+      #   echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
+      #   gcloud auth activate-service-account --key-file $CM_BUILD_DIR/gcloud_storage_key.json
+      #   gsutil cp $CM_BUILD_DIR/app/build/outputs/**/*.apk gs://cmappbuilds
       # - name: upload to Google storage
     artifacts:
       - app/build/outputs/**/**/*.aab
@@ -52,6 +52,6 @@ workflows:
         notify:
           success: true
           failure: true
-      # google_play:
-      #   credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-      #   track: internal
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
