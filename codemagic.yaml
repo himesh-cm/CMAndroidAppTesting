@@ -8,10 +8,10 @@ workflows:
         - keystore_credentials
         - aws_credentials
         # - GOOGLE_APP_CREDENTIALS
-      gradle: 6.7
       vars:
         PACKAGE_NAME: io.nevercode.androidappcm
         # CM_KEYSTORE_PATH: /tmp/keystore.keystore
+      gradle: 6.7
     triggering:
       events:
         - push
