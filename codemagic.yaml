@@ -7,7 +7,7 @@ workflows:
       groups:
         - keystore_credentials
         - aws_credentials
-        - GOOGLE_APP_CREDENTIALS
+        # - GOOGLE_APP_CREDENTIALS
       vars:
         PACKAGE_NAME: io.nevercode.androidappcm
         # CM_KEYSTORE_PATH: /tmp/keystore.keystore
@@ -47,11 +47,11 @@ workflows:
       - app/build/outputs/**/**/*.apk
     publishing:
       slack:
-        channel: codemagic-builds-testing
+        channel: ce-builds
         notify_on_build_start: true
         notify:
           success: true
           failure: true
-      google_play:
-        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-        track: internal
+      # google_play:
+      #   credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+      #   track: internal
