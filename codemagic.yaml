@@ -13,7 +13,7 @@ workflows:
         # CM_KEYSTORE_PATH: /tmp/keystore.keystore
       # gradle: 6.7
       cocoapods: default
-      node: 12.14.0
+      gradle: 7.7
     triggering:
       events:
         - push
